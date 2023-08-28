@@ -1,0 +1,7 @@
+[requires]
+cli11/[>=2]
+boost/1.71.0
+
+[generators]
+CMakeToolchain
+CMakeDeps
