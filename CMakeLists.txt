@@ -10,8 +10,8 @@ option(RUN_IWYU OFF)
 option(BUILD_DOCS OFF)
 option(ENABLE_COVERAGE OFF)
 
-# TODO: use conan for installing dependecies
-add_subdirectory(libs)
+find_package(CLI11 REQUIRED)
+find_package(Boost REQUIRED)
 
 add_library(
   ${PROJECT_NAME}_lib STATIC
@@ -23,11 +23,20 @@ target_include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_link_libraries(
+  ${PROJECT_NAME}_lib PUBLIC
+  ${BOOST_LIBS}
+)
+
 target_compile_options(
   ${PROJECT_NAME}_lib PRIVATE -Wall -Wpedantic -Werror
 )
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(
+  ${PROJECT_NAME} 
+  src/main.cpp
+  src/app_config.cpp
+)
 
 target_link_libraries(
   ${PROJECT_NAME} PRIVATE 

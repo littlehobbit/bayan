@@ -1,6 +1,12 @@
 #include <iostream>
 
+#include "app_config.h"
+
 int main(int argc, char *argv[]) {
-  // 
-  std::cout << "Hello, World!" << std::endl;
+  AppConfig config;
+
+  if (!config.parse(argc, argv)) {
+    return 1;
+  }
+  
 }
