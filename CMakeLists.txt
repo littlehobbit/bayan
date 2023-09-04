@@ -11,7 +11,7 @@ option(BUILD_DOCS OFF)
 option(ENABLE_COVERAGE OFF)
 
 find_package(CLI11 REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS filesystem REQUIRED)
 
 add_library(
   ${PROJECT_NAME}_lib STATIC
@@ -25,7 +25,7 @@ target_include_directories(
 
 target_link_libraries(
   ${PROJECT_NAME}_lib PUBLIC
-  ${BOOST_LIBS}
+  ${Boost_LIBRARIES}
 )
 
 target_compile_options(

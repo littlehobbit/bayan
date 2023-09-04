@@ -6,7 +6,7 @@ find_package(GTest REQUIRED)
 
 add_executable(
   ${PROJECT_NAME}
-  test_dummy.cpp
+  test_file_seeker.cpp
 )
 
 target_link_libraries(
@@ -31,3 +31,8 @@ if (${ENABLE_COVERAGE})
   include(${CMAKE_SOURCE_DIR}/cmake/code_coverage.cmake)
   append_coverage_compiler_flags_to_target(${PROJECT_NAME})
 endif()
+
+target_compile_definitions(
+  ${PROJECT_NAME} PRIVATE 
+  TEST_DIR_PATH="${CMAKE_CURRENT_SOURCE_DIR}"
+)
