@@ -13,8 +13,7 @@ class Crc32 final : public HashAlgorithm {
   auto hash(const Block &block) noexcept -> std::vector<std::uint8_t> override {
     boost::crc_32_type crc32;
     // NOLINTNEXTLINE
-    crc32.process_bytes(reinterpret_cast<const void *>(block.data()),
-                        block.size());
+    crc32.process_bytes(block.data(), block.size());
     const auto checksum = static_cast<std::uint32_t>(crc32.checksum());
     return {static_cast<std::uint8_t>(checksum >> 24),           // NOLINT
             static_cast<std::uint8_t>((checksum >> 16) & 0xFF),  // NOLINT
