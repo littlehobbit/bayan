@@ -7,6 +7,7 @@ find_package(GTest REQUIRED)
 add_executable(
   ${PROJECT_NAME}
   test_file_seeker.cpp
+  test_block_file.cpp
 )
 
 target_link_libraries(

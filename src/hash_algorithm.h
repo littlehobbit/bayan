@@ -3,11 +3,11 @@
 
 #include <vector>
 
+#include "block.h"
+
 namespace hash {
 
 enum class HashFunction { md5, crc32, sha256 };
-
-using Block = std::vector<std::byte>;
 
 class HashAlgorithm {
  public:
