@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "hash_algorithm.h"
+#include "hash/hash_algorithm.h"
 
 struct AppConfig {
   std::vector<std::filesystem::path> paths_to_scan;
