@@ -10,6 +10,7 @@ option(RUN_IWYU OFF)
 option(BUILD_DOCS OFF)
 option(ENABLE_COVERAGE OFF)
 
+find_package(PicoSha2 REQUIRED)
 find_package(CLI11 REQUIRED)
 find_package(Boost COMPONENTS filesystem system REQUIRED)
 
@@ -26,6 +27,7 @@ target_include_directories(
 target_link_libraries(
   ${PROJECT_NAME}_lib PUBLIC
   ${Boost_LIBRARIES}
+  picosha2::picosha2
 )
 
 target_compile_options(
