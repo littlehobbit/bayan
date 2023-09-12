@@ -26,7 +26,7 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_COVERAGE=ON -DBUILD_TESTS=ON -DRUN_CLANG_TIDY=ON
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel
+      run: source ${{github.workspace}}/build/conan_build.sh && cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
