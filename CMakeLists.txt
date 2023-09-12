@@ -11,7 +11,7 @@ option(BUILD_DOCS OFF)
 option(ENABLE_COVERAGE OFF)
 
 find_package(CLI11 REQUIRED)
-find_package(Boost COMPONENTS filesystem REQUIRED)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
 
 add_library(
   ${PROJECT_NAME}_lib STATIC
