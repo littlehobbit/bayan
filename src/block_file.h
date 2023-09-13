@@ -2,7 +2,12 @@
 #define __BLOCK_FILE_H_FS9DMB25VDHQ__
 
 #include <algorithm>
+#include <fstream>
 #include <vector>
+
+#include <boost/filesystem/directory.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include "block.h"
 
@@ -14,14 +19,17 @@ class BlockFile {
 
   virtual auto read(std::size_t block_size) noexcept -> Block = 0;
 
+  virtual auto path() const noexcept -> const boost::filesystem::path& = 0;
+
   virtual bool finished() const noexcept = 0;
 };
 
-template <typename Stream>
-class BlockStream : public BlockFile {
+class BlockFileImpl : public BlockFile {
  public:
-  BlockStream(Stream&& stream, std::size_t size)
-      : _stream{std::move(stream)}, _remaining{size} {}
+  BlockFileImpl(boost::filesystem::directory_entry file)
+      : _file{std::move(file)},
+        _stream{_file.path()},
+        _remaining{boost::filesystem::file_size(_file)} {}
 
   auto read(std::size_t block_size) noexcept -> Block override {
     Block block(block_size, std::byte{0x00});
@@ -33,10 +41,15 @@ class BlockStream : public BlockFile {
     return block;
   }
 
+  auto path() const noexcept -> const boost::filesystem::path& override {
+    return _file.path();
+  }
+
   bool finished() const noexcept override { return _remaining == 0; }
 
  private:
-  Stream _stream;
+  boost::filesystem::directory_entry _file;
+  std::ifstream _stream;
   std::size_t _remaining;
 };
 

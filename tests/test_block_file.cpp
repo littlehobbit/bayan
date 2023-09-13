@@ -1,19 +1,37 @@
 #include <cstddef>
+#include <fstream>
+#include <ios>
 #include <sstream>
 
+#include <boost/filesystem/directory.hpp>
+#include <boost/filesystem/file_status.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include "block_file.h"
 
+#include <gmock/gmock-matchers.h>
+
+#if not defined(TEST_DIR_PATH)
+#define TEST_DIR_PATH "tests"
+#endif
+
+using namespace ::testing;
+
 class BlockStreamTest : public ::testing::Test {
  public:
-  std::stringstream string_file{"Hello, World!"};
-  block_file::BlockStream<std::stringstream> file{std::move(string_file),
-                                                  string_file.str().size()};
+  boost::filesystem::path hello_world_path =
+      boost::filesystem::path{TEST_DIR_PATH} / "hello_world.txt";
+  block_file::BlockFileImpl file{
+      boost::filesystem::directory_entry{hello_world_path}};
 };
 
 // NOLINTNEXTLINE
 TEST_F(BlockStreamTest, AfterInit_NotFinished) {
+  ASSERT_EQ(file.path(), hello_world_path);
   ASSERT_FALSE(file.finished());
 }
 
@@ -38,14 +56,20 @@ TEST_F(BlockStreamTest, OnRead_ReturnsBlockOfSpecifiedSize) {
   }
 
   {
-    auto rest = file.read(20); // NOLINT
+    auto rest = file.read(20);  // NOLINT
     ASSERT_TRUE(file.finished());
   }
 }
 
 // NOLINTNEXTLINE
-TEST_F(BlockStreamTest, EmptyFileByDefaultFinished) {
-  std::stringstream empty{};
-  block_file::BlockStream file{std::move(empty), empty.str().size()};
-  ASSERT_TRUE(file.finished());
+TEST_F(BlockStreamTest, EmptyFile_ByDefultFinished) {
+  boost::filesystem::directory_entry empty_file{
+      boost::filesystem::path{TEST_DIR_PATH} / "empty_file.txt"};
+  ASSERT_TRUE(boost::filesystem::exists(empty_file));
+
+  block_file::BlockFileImpl block_file{empty_file};
+
+  ASSERT_EQ(block_file.path(), empty_file.path());
+  ASSERT_TRUE(block_file.finished());
+  ASSERT_THAT(block_file.read(42), Each(Eq(std::byte{0})));
 }
