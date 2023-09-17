@@ -9,6 +9,7 @@ add_executable(
   test_file_seeker.cpp
   test_block_file.cpp
   test_hash_algorithms.cpp
+  test_bayan.cpp
 )
 
 target_link_libraries(

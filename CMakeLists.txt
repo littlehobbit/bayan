@@ -16,7 +16,7 @@ find_package(Boost COMPONENTS filesystem system REQUIRED)
 
 add_library(
   ${PROJECT_NAME}_lib STATIC
-  src/dummy.cpp
+  src/bayan.cpp
 )
 
 target_include_directories(
