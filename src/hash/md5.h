@@ -11,7 +11,7 @@ namespace hash {
 
 class Md5 final : public HashAlgorithm {
  public:
-  auto hash(const Block &block) noexcept -> std::vector<std::uint8_t> override {
+  auto hash(const Block &block) const noexcept -> Hash override {
     boost::uuids::detail::md5 md5;
     md5.process_bytes(block.data(), block.size());
 
@@ -19,7 +19,8 @@ class Md5 final : public HashAlgorithm {
     md5.get_digest(digets);
 
     constexpr auto MD5_HASH_SIZE = 16;
-    std::vector<std::uint8_t> hash{};
+
+    Hash hash{};
     hash.reserve(MD5_HASH_SIZE);
 
     for (auto diget : digets) {

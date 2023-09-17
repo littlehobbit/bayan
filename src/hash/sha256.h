@@ -11,8 +11,8 @@ namespace hash {
 
 class Sha256 final : public HashAlgorithm {
  public:
-  auto hash(const Block &block) noexcept -> std::vector<std::uint8_t> override {
-    std::vector<std::uint8_t> hash;
+  auto hash(const Block &block) const noexcept -> Hash override {
+    Hash hash{};
 
     constexpr auto SHA256_HASH_SIZE = 32;
     hash.resize(SHA256_HASH_SIZE);

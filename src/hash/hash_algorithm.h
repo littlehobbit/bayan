@@ -10,12 +10,13 @@ namespace hash {
 
 enum class HashFunction { md5, crc32, sha256 };
 
+using Hash = std::vector<std::uint8_t>;
+
 class HashAlgorithm {
  public:
   virtual ~HashAlgorithm() = default;
 
-  virtual auto hash(const Block &block) noexcept
-      -> std::vector<std::uint8_t> = 0;
+  virtual auto hash(const Block &block) const noexcept -> Hash = 0;
 };
 
 }  // namespace hash

@@ -10,7 +10,7 @@ namespace hash {
 
 class Crc32 final : public HashAlgorithm {
  public:
-  auto hash(const Block &block) noexcept -> std::vector<std::uint8_t> override {
+  auto hash(const Block &block) const noexcept -> Hash override {
     boost::crc_32_type crc32;
     // NOLINTNEXTLINE
     crc32.process_bytes(block.data(), block.size());
