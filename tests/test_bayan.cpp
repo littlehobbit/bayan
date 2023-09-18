@@ -72,8 +72,8 @@ TEST_F(BayanTest, For2SameFile_WithSameSize_ReturnAsDuplicates) {
   auto second_file = MockBlockFile{};
   EXPECT_CALL(second_file, path).WillRepeatedly(ReturnRef(second_file_path));
 
-  EXPECT_CALL(first_file, finished).WillOnce(Return(true));
-  EXPECT_CALL(second_file, finished).WillOnce(Return(true));
+  EXPECT_CALL(first_file, finished).WillRepeatedly(Return(true));
+  EXPECT_CALL(second_file, finished).WillRepeatedly(Return(true));
 
   // NOLINTNEXTLINE
   auto file_content = create_file_block(BLOCK_SIZE, {std::byte{0x42}});
@@ -88,8 +88,7 @@ TEST_F(BayanTest, For2SameFile_WithSameSize_ReturnAsDuplicates) {
 
   auto res = finder.find_duplicates({&first_file, &second_file});
   ASSERT_EQ(res.size(), 1);
-  // TODO: return sets of pointers, not paths
-  ASSERT_THAT(res[0], ElementsAre(first_file.path(), second_file.path()));
+  ASSERT_THAT(res[0], UnorderedElementsAre(&first_file, &second_file));
 }
 
 // NOLINTNEXTLINE
@@ -97,8 +96,8 @@ TEST_F(BayanTest, For2DifferentFiles_WithSameSize_ReturnNothing) {
   auto first_file = MockBlockFile{};
   auto second_file = MockBlockFile{};
 
-  ON_CALL(first_file, finished).WillByDefault(Return(true));
-  ON_CALL(second_file, finished).WillByDefault(Return(true));
+  EXPECT_CALL(first_file, finished).WillRepeatedly(Return(true));
+  EXPECT_CALL(second_file, finished).WillRepeatedly(Return(true));
 
   // NOLINTNEXTLINE
   auto first_block = create_file_block(BLOCK_SIZE, {std::byte{0x42}});
@@ -123,9 +122,9 @@ TEST_F(BayanTest, For2DifferentFiles_WithDifferentSize_ReturnNothing) {
   auto big_file = MockBlockFile{};
   auto small_file = MockBlockFile{};
 
-  EXPECT_CALL(big_file, finished).WillOnce(Return(false));
+  EXPECT_CALL(big_file, finished).WillRepeatedly(Return(false));
 
-  EXPECT_CALL(small_file, finished).WillOnce(Return(true));
+  EXPECT_CALL(small_file, finished).WillRepeatedly(Return(true));
 
   // NOLINTNEXTLINE
   auto first_file_blocks =

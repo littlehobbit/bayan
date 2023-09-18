@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <memory>
-#include <set>
+#include <unordered_set>
 #include <vector>
 
 #include <boost/filesystem/path.hpp>
@@ -18,15 +18,30 @@ class BayanFinder {
   BayanFinder(const hash::HashAlgorithm& algorithm, std::size_t block_size)
       : _hasher{algorithm}, _block_size{block_size} {};
 
-  auto find_duplicates(std::vector<block_file::BlockFile*> files) const noexcept
-      -> std::vector<std::set<boost::filesystem::path>>;
+  using FileSequence = std::vector<block_file::BlockFile*>;
+  using DuplicatesSet = std::unordered_set<block_file::BlockFile*>;
+
+  auto find_duplicates(const FileSequence& files) const noexcept
+      -> std::vector<DuplicatesSet>;
 
  private:
   using HashSequence = std::vector<hash::Hash>;
+  using HashDict = std::map<HashSequence, FileSequence>;
 
-  auto hash_new_block_from_file(block_file::BlockFile& file) const noexcept -> hash::Hash;
+  auto init_hash_dict(const FileSequence& files) const noexcept -> HashDict;
 
-  auto append_hash(const HashSequence &seq, hash::Hash &&hash) const -> HashSequence;
+  auto hash_new_block_from_file(block_file::BlockFile& file) const noexcept
+      -> hash::Hash;
+
+  auto append_hash(const HashSequence& seq, hash::Hash&& hash) const
+      -> HashSequence;
+
+  auto to_return_val(HashDict&& dict) const noexcept
+      -> std::vector<DuplicatesSet>;
+
+  auto need_read_more(const HashDict& dict) const noexcept -> bool;
+
+    auto read_more(const HashDict& dict) const noexcept -> HashDict;
 
   const hash::HashAlgorithm& _hasher;
   std::size_t _block_size;
