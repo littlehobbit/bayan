@@ -8,13 +8,14 @@
 
 #include <boost/filesystem/directory.hpp>
 #include <boost/filesystem/file_status.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 namespace utils {
 
 inline auto recursive_find(const boost::filesystem::path &directory,
-                           std::size_t scan_level,
-                           std::optional<std::string> mask)
+                           std::size_t scan_level, std::size_t minimal_size,
+                           std::optional<std::string> mask = std::nullopt)
     -> std::vector<boost::filesystem::path> {
   namespace fs = boost::filesystem;
 
@@ -26,7 +27,7 @@ inline auto recursive_find(const boost::filesystem::path &directory,
       directory_iterator.disable_recursion_pending();
     }
 
-    if (fs::is_regular_file(entry)) {
+    if (fs::is_regular_file(entry) && fs::file_size(entry) >= minimal_size) {
       if (mask.has_value() &&
           !std::regex_search(entry.path().filename().string(),
                              std::regex{*mask})) {

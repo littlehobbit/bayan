@@ -28,7 +28,7 @@ class FilesSeekerTest : public ::testing::Test {
 
 // NOLINTNEXTLINE
 TEST_F(FilesSeekerTest, RecursiveFind_NoDepth_NoMask) {
-  auto res = utils::recursive_find(test_dir_path, 0, std::nullopt);
+  auto res = utils::recursive_find(test_dir_path, 0, 0);
 
   std::vector<fs::path> expected = {
       test_dir_path / "file1.txt",
@@ -39,8 +39,16 @@ TEST_F(FilesSeekerTest, RecursiveFind_NoDepth_NoMask) {
 }
 
 // NOLINTNEXTLINE
+TEST_F(FilesSeekerTest, RecursiveFind_NoDepth_NoMask_WithSize1) {
+  auto res = utils::recursive_find(test_dir_path, 0, 1);
+
+  std::vector<fs::path> expected = {test_dir_path / "file1.txt"};
+  ASSERT_EQ(expected, res);
+}
+
+// NOLINTNEXTLINE
 TEST_F(FilesSeekerTest, RecursiveFind_With1Depth_NoMask) {
-  auto res = utils::recursive_find(test_dir_path, 1, std::nullopt);
+  auto res = utils::recursive_find(test_dir_path, 1, 0);
 
   std::vector<fs::path> expected = {
       test_dir_path / "file1.txt",
@@ -55,7 +63,8 @@ TEST_F(FilesSeekerTest, RecursiveFind_With1Depth_NoMask) {
 // NOLINTNEXTLINE
 TEST_F(FilesSeekerTest, RecursiveFind_WithFullDepth_WithMask) {
   constexpr auto FULL_TEST_DEPTH = 4;
-  auto res = utils::recursive_find(test_dir_path, FULL_TEST_DEPTH, ".*\\.hex");
+  auto res =
+      utils::recursive_find(test_dir_path, FULL_TEST_DEPTH, 0, ".*\\.hex");
 
   std::vector<fs::path> expected = {test_dir_path / "subdirectory" /
                                     "third_subdirectory" / "file8.hex"};
@@ -67,12 +76,12 @@ TEST_F(FilesSeekerTest, OnNoSuchPath_ThrowError) {
   fs::path bad_dir_path = fs::path{TEST_DIR_PATH} / "dummy_bad_path";
   ASSERT_FALSE(fs::exists(bad_dir_path));
 
-  ASSERT_THROW(utils::recursive_find(bad_dir_path, 0, std::nullopt),
+  ASSERT_THROW(utils::recursive_find(bad_dir_path, 0, 0),
                boost::filesystem::filesystem_error);
 }
 
 // NOLINTNEXTLINE
 TEST_F(FilesSeekerTest, OnBadRegex_ThrowError) {
-  ASSERT_THROW(utils::recursive_find(test_dir_path, 0, "ba(d"),
+  ASSERT_THROW(utils::recursive_find(test_dir_path, 0, 0, "ba(d"),
                std::regex_error);
 }
