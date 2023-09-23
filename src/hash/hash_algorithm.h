@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "block.h"
+#include "block/block.h"
 
 namespace hash {
 

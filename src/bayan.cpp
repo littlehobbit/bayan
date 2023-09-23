@@ -4,8 +4,6 @@
 #include <iterator>
 #include <numeric>
 
-#include "block_file.h"
-
 namespace bayan {
 
 auto BayanFinder::find_duplicates(const FileSequence &files) const noexcept

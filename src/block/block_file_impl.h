@@ -1,5 +1,5 @@
-#ifndef __BLOCK_FILE_H_FS9DMB25VDHQ__
-#define __BLOCK_FILE_H_FS9DMB25VDHQ__
+#ifndef __BLOCK_FILE_IMPL_H_U96HY9OV9ORC__
+#define __BLOCK_FILE_IMPL_H_U96HY9OV9ORC__
 
 #include <algorithm>
 #include <fstream>
@@ -7,22 +7,10 @@
 
 #include <boost/filesystem/directory.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
-#include "block.h"
+#include "block_file.h"
 
 namespace block_file {
-
-class BlockFile {
- public:
-  virtual ~BlockFile() = default;
-
-  virtual auto read(std::size_t block_size) noexcept -> Block = 0;
-
-  virtual auto path() const noexcept -> const boost::filesystem::path& = 0;
-
-  virtual bool finished() const noexcept = 0;
-};
 
 class BlockFileImpl : public BlockFile {
  public:
@@ -55,4 +43,4 @@ class BlockFileImpl : public BlockFile {
 
 }  // namespace block_file
 
-#endif  // __BLOCK_FILE_H_FS9DMB25VDHQ__
+#endif  // __BLOCK_FILE_IMPL_H_U96HY9OV9ORC__

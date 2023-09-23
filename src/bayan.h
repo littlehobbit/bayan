@@ -8,7 +8,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include "block_file.h"
+#include "block/block_file.h"
 #include "hash/hash_algorithm.h"
 
 namespace bayan {
@@ -41,7 +41,7 @@ class BayanFinder {
 
   auto need_read_more(const HashDict& dict) const noexcept -> bool;
 
-    auto read_more(const HashDict& dict) const noexcept -> HashDict;
+  auto read_more(const HashDict& dict) const noexcept -> HashDict;
 
   const hash::HashAlgorithm& _hasher;
   std::size_t _block_size;

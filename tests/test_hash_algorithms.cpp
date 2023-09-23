@@ -3,7 +3,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "block.h"
+#include "block/block.h"
 #include "hash/crc32.h"
 #include "hash/md5.h"
 #include "hash/sha256.h"

@@ -8,8 +8,8 @@
 #include <gtest/gtest.h>
 
 #include "bayan.h"
-#include "block.h"
-#include "block_file.h"
+#include "block/block.h"
+#include "block/block_file.h"
 #include "hash/hash_algorithm.h"
 
 #include <gmock/gmock-actions.h>

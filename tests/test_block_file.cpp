@@ -11,7 +11,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "block_file.h"
+#include "block/block_file_impl.h"
 
 #include <gmock/gmock-matchers.h>
 
