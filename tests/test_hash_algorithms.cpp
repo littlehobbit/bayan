@@ -5,6 +5,7 @@
 
 #include "block/block.h"
 #include "hash/crc32.h"
+#include "hash/hash_algorithm.h"
 #include "hash/md5.h"
 #include "hash/sha256.h"
 
@@ -49,4 +50,18 @@ TEST(HashAlgorithmsTest, Sha256) {
                           0x6c, 0xbc, 0xb5, 0xd1, 0x8f, 0x96, 0x23, 0x6d, 0xa9,
                           0x24, 0xe2, 0x72, 0x74, 0xec, 0xb6, 0xa4, 0x6f, 0x93,
                           0x90, 0x3e, 0x27, 0x2c, 0xa6));
+}
+
+// NOLINTNEXTLINE
+TEST(HashAlgorithmsTest, OnCreate_ReturnSpecifiedAlgorithm) {
+  ASSERT_THAT(hash::create(hash::HashType::crc32).get(),
+              WhenDynamicCastTo<hash::Crc32*>(NotNull()));
+
+  ASSERT_THAT(hash::create(hash::HashType::md5).get(),
+              WhenDynamicCastTo<hash::Md5*>(NotNull()));
+
+  ASSERT_THAT(hash::create(hash::HashType::sha256).get(),
+              WhenDynamicCastTo<hash::Sha256*>(NotNull()));
+
+  ASSERT_THAT(hash::create(static_cast<hash::HashType>(0xff)), IsNull());
 }

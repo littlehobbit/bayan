@@ -17,6 +17,7 @@ find_package(Boost COMPONENTS filesystem system REQUIRED)
 add_library(
   ${PROJECT_NAME}_lib STATIC
   src/bayan.cpp
+  src/hash/hash_algorithm.cpp
 )
 
 target_include_directories(
