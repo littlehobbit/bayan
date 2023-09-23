@@ -6,12 +6,14 @@
 #include <string>
 #include <vector>
 
+#include <boost/filesystem/path.hpp>
+
 #include "hash/hash_algorithm.h"
 
 struct AppConfig {
-  std::vector<std::filesystem::path> paths_to_scan;
+  std::vector<boost::filesystem::path> paths_to_scan;
 
-  std::vector<std::filesystem::path> paths_to_ignore;
+  std::vector<boost::filesystem::path> paths_to_ignore;
 
   std::size_t scan_level = 0;
 
@@ -22,7 +24,7 @@ struct AppConfig {
   static constexpr auto DEFAULT_BLOCK_SIZE = 512;
   std::size_t block_size = DEFAULT_BLOCK_SIZE;
 
-  hash::HashFunction hash_function = hash::HashFunction::md5;
+  hash::HashType hash_function = hash::HashType::md5;
 
   bool parse(int argc, char *argv[]) noexcept;  // NOLINT
 };

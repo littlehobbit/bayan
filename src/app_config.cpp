@@ -5,6 +5,8 @@
 #include <CLI/Error.hpp>
 #include <CLI/Validators.hpp>
 
+#include "hash/hash_algorithm.h"
+
 bool AppConfig::parse(int argc, char *argv[]) noexcept {  // NOLINT
   CLI::App app{"duplicate files finder", "bayan"};
 
@@ -28,11 +30,10 @@ bool AppConfig::parse(int argc, char *argv[]) noexcept {  // NOLINT
   app.add_option("-b,--block-size", block_size, "Read block size")
       ->default_val(block_size);
 
-  using hash::HashFunction;
-  std::map<std::string, HashFunction> hash_mapping{
-      {"md5", HashFunction::md5},
-      {"crc32", HashFunction::crc32},
-      {"sha256", HashFunction::sha256}};
+  using hash::HashType;
+  std::map<std::string, HashType> hash_mapping{{"md5", HashType::md5},
+                                               {"crc32", HashType::crc32},
+                                               {"sha256", HashType::sha256}};
   app.add_option("-a,--algorithm", hash_function,
                  "Hash algorithm for file comparison")
       ->transform(CLI::CheckedTransformer{hash_mapping, CLI::ignore_case})
