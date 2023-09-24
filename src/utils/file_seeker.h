@@ -29,9 +29,6 @@ class FileSeeker {
     std::vector<fs::path> paths{};
 
     for (const auto &directory : _scan_paths) {
-      // TODO: extract to `scan_directory`
-      // TODO: append results of scan to `paths`
-
       auto directory_iterator = fs::recursive_directory_iterator{directory};
       for (auto &&entry : directory_iterator) {
         if (static_cast<std::size_t>(directory_iterator.depth()) ==
