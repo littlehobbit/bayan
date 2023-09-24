@@ -12,12 +12,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        submodules: recursive
 
-    - name: Install dependencies
-      run: sudo apt update && sudo apt install -y cmake g++ make libgtest-dev libgmock-dev git clang-tidy doxygen
+    - name: Install toolkit
+      run: |
+        sudo apt update \
+          && sudo apt install -y cmake g++ make libgtest-dev libgmock-dev \
+          clang-tidy lcov gcovr python3-pip
+
+    - name: Install conan
+      run: sudo pip install conan
+
+    - name: Install conan dependencies
+      run: conan profile detect && conan install . -of build --build missing
 
     - name: Get Version
       id: get_version
@@ -34,10 +40,21 @@ jobs:
     - name: Configure CMake
       env:  
         VERSION: ${{steps.get_version.outputs.version}}
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TESTS=ON -DBUILD_DOCS=ON -DBUILD_PACKAGE=ON -DVERSION=${{env.VERSION}} -DRUN_CLANG_TIDY=ON
+      run: |
+        cmake -B ${{github.workspace}}/build   \
+            -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/build/conan_toolchain.cmake \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}                  \
+            -DBUILD_TESTS=ON                      \
+            -DBUILD_DOCS=ON                       \
+            -DBUILD_PACKAGE=ON                    \
+            -DVERSION=${{env.VERSION}}            \
+            -DRUN_CLANG_TIDY=ON
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel
+      run: |
+        source ${{github.workspace}}/build/conanbuild.sh \
+          && cmake --build ${{github.workspace}}/build \
+                   --config ${{env.BUILD_TYPE}} --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
