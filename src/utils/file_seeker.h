@@ -34,7 +34,8 @@ class FileSeeker {
 
       auto directory_iterator = fs::recursive_directory_iterator{directory};
       for (auto &&entry : directory_iterator) {
-        if (directory_iterator.depth() == (scan_level + 1) ||
+        if (static_cast<std::size_t>(directory_iterator.depth()) ==
+                (scan_level + 1) ||
             is_ignored(entry)) {
           directory_iterator.disable_recursion_pending();
           continue;
