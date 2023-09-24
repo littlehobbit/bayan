@@ -8,7 +8,7 @@
 #include "hash/hash_algorithm.h"
 
 bool AppConfig::parse(int argc, char *argv[]) noexcept {  // NOLINT
-  CLI::App app{"duplicate files finder", "bayan"};
+  CLI::App app{"Duplicate files finder", "bayan"};
 
   app.add_option("-s,--scan", paths_to_scan, "List of paths for scanning")
       ->check(CLI::ExistingPath)
