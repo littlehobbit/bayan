@@ -41,13 +41,13 @@ jobs:
       env:  
         VERSION: ${{steps.get_version.outputs.version}}
       run: |
-        cmake -B ${{github.workspace}}/build   \
-            -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/build/conan_toolchain.cmake \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}                  \
-            -DBUILD_TESTS=ON                      \
-            -DBUILD_DOCS=ON                       \
-            -DBUILD_PACKAGE=ON                    \
-            -DVERSION=${{env.VERSION}}            \
+        cmake -B ${{github.workspace}}/build                                          \
+            -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/build/conan_toolchain.cmake  \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}                                    \
+            -DBUILD_TESTS=ON                                                          \
+            -DBUILD_DOCS=ON                                                           \
+            -DBUILD_PACKAGE=ON                                                        \
+            -DVERSION=${{env.VERSION}}                                                \
             -DRUN_CLANG_TIDY=ON
 
     - name: Build
