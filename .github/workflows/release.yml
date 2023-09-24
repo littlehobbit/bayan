@@ -17,7 +17,7 @@ jobs:
       run: |
         sudo apt update \
           && sudo apt install -y cmake g++ make libgtest-dev libgmock-dev \
-          clang-tidy lcov gcovr python3-pip
+          clang-tidy lcov gcovr python3-pip doxygen
 
     - name: Install conan
       run: sudo pip install conan
